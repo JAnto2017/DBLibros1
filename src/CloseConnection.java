@@ -18,6 +18,7 @@ public class CloseConnection {
 	public CloseConnection() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	/********************************************************************************************************/
 	public void CerrarConexion(Connection _conx) throws SQLException {
 		try {
