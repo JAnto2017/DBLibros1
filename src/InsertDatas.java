@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
  */
 
 /**
- * @author Usuario
+ * @author Jose Antonio
  *
  */
 public class InsertDatas {

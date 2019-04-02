@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -34,7 +35,17 @@ public class PrincipalBDLibros {
 	private JTextField textField_12;
 	private JTextField textField_13;
 	private JTextField textField_14;
-
+	private JTextField txtRoot;
+	//private JTextField txtJoseantonio;
+	private JTextField txtBdlibros;
+	
+	//---------------------------------------------- Acceso a otras clases
+	MySQLConnection conexionBD;
+	CloseConnection cerrarConexBD;
+	InsertDatas inserDatosBD;
+	GetDatas obtenerDatosBD;
+	//----------------------------------------------
+	
 	/**
 	 * Launch the application.
 	 */
@@ -64,10 +75,18 @@ public class PrincipalBDLibros {
 	private void initialize() {
 		frmBaseDeDatos = new JFrame();
 		frmBaseDeDatos.setBackground(new Color(255, 228, 196));
-		frmBaseDeDatos.setTitle("BASE DE DATOS");
+		frmBaseDeDatos.setTitle("BASE DE DATOS LIBROS");
 		frmBaseDeDatos.setBounds(100, 100, 590, 552);
 		frmBaseDeDatos.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBaseDeDatos.getContentPane().setLayout(null);
+		
+		JButton btnSalir = new JButton("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+			//------------------------------------------------------------btn. SALIR
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 11, 554, 453);
@@ -75,7 +94,7 @@ public class PrincipalBDLibros {
 		
 		JPanel panel_0 = new JPanel();
 		panel_0.setBackground(new Color(216, 191, 216));
-		tabbedPane.addTab("Leer Base Datos", null, panel_0, null);
+		tabbedPane.addTab("Leer Base Datos", null, panel_0, null);		//pestaña 0 
 		panel_0.setLayout(null);
 		
 		JLabel lblTtulo = new JLabel("T\u00CDTULO:");
@@ -200,7 +219,7 @@ public class PrincipalBDLibros {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 218, 185));
-		tabbedPane.addTab("Escribir Base Datos", null, panel_1, null);
+		tabbedPane.addTab("Escribir Base Datos", null, panel_1, null);		//pestaña 1
 		panel_1.setLayout(null);
 		
 		JLabel lblTtulo_1 = new JLabel("T\u00CDTULO:");
@@ -294,13 +313,57 @@ public class PrincipalBDLibros {
 		btnNewButton.setBackground(new Color(210, 105, 30));
 		panel_2.add(btnNewButton);
 		
-		JButton btnSalir = new JButton("Salir");
-		btnSalir.addActionListener(new ActionListener() {
-			//-------------------------------------------------------btn. SALIR
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(152, 251, 152));
+		tabbedPane.addTab("Conectar en Base de Datos", null, panel_3, null);
+		panel_3.setLayout(null);
+		
+		//------------------------------------------------------------------------- BTN. CONECTAR CON BD
+		//precisa de: user, password, dbname
+		JButton btnConectarConBd = new JButton("CONECTAR CON B.D.");
+		btnConectarConBd.setForeground(new Color(0, 0, 255));
+		btnConectarConBd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
 			}
 		});
+		btnConectarConBd.setBackground(new Color(178, 34, 34));
+		btnConectarConBd.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnConectarConBd.setBounds(121, 365, 290, 34);
+		panel_3.add(btnConectarConBd);
+		
+		JLabel lblNewLabel_1 = new JLabel("USUARIO DE B.D.");
+		lblNewLabel_1.setBounds(81, 91, 164, 14);
+		panel_3.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("PASSWORD DE B.D.");
+		lblNewLabel_2.setBounds(81, 127, 128, 14);
+		panel_3.add(lblNewLabel_2);
+		
+		JLabel lblNombreDeBd = new JLabel("NOMBRE DE B.D.");
+		lblNombreDeBd.setBounds(81, 171, 128, 14);
+		panel_3.add(lblNombreDeBd);
+		
+		txtRoot = new JTextField();
+		txtRoot.setDropMode(DropMode.INSERT);
+		txtRoot.setText("root");
+		txtRoot.setBounds(247, 88, 143, 20);
+		panel_3.add(txtRoot);
+		txtRoot.setColumns(10);
+		
+		//JPasswordField password = new JPasswordField();
+		//txtJoseantonio = new JTextField();
+		JPasswordField txtJoseantonio = new JPasswordField();
+		txtJoseantonio.setDropMode(DropMode.INSERT);
+		txtJoseantonio.setText("joseantonio-123");
+		txtJoseantonio.setBounds(247, 124, 143, 20);
+		panel_3.add(txtJoseantonio);
+		txtJoseantonio.setColumns(10);
+		
+		txtBdlibros = new JTextField();
+		txtBdlibros.setText("bdlibros1");
+		txtBdlibros.setBounds(247, 168, 143, 20);
+		panel_3.add(txtBdlibros);
+		txtBdlibros.setColumns(10);
 		btnSalir.setBackground(new Color(205, 92, 92));
 		btnSalir.setBounds(10, 475, 554, 23);
 		frmBaseDeDatos.getContentPane().add(btnSalir);
