@@ -7,6 +7,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -35,16 +36,22 @@ public class PrincipalBDLibros {
 	private JTextField textField_12;
 	private JTextField textField_13;
 	private JTextField textField_14;
-	private JTextField txtRoot;
+	private JTextField txtF_user;
 	//private JTextField txtJoseantonio;
-	private JTextField txtBdlibros;
+	private JPasswordField txtF_passw;
+	private JTextField txtF_nombreBD;
 	
-	//---------------------------------------------- Acceso a otras clases
-	MySQLConnection conexionBD;
-	CloseConnection cerrarConexBD;
-	InsertDatas inserDatosBD;
-	GetDatas obtenerDatosBD;
-	//----------------------------------------------
+	//--------------------------------------------------------------------- VARIABLES GLOBALES
+	private String user, dbName, myPas;
+	char[] password;
+	private Connection conexion;
+	
+	//--------------------------------------------------------------------- Acceso a otras clases
+	MySQLConnection conexionBD 		= new MySQLConnection();
+	CloseConnection cerrarConexBD 	= new CloseConnection();
+	InsertDatas 	inserDatosBD 	= new InsertDatas();
+	GetDatas 		obtenerDatosBD 	= new GetDatas();
+	//-------------------------------------------------------------------------------------------
 	
 	/**
 	 * Launch the application.
@@ -323,7 +330,24 @@ public class PrincipalBDLibros {
 		JButton btnConectarConBd = new JButton("CONECTAR CON B.D.");
 		btnConectarConBd.setForeground(new Color(0, 0, 255));
 		btnConectarConBd.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
+				//leer datos de los TextEdit 
+				setUser(txtF_user.getText());
+				setPassword(txtF_passw.getPassword());
+				setDbName(txtF_nombreBD.getText());
+				
+				//convertir char[] del passwordField en tipo String
+				//otra alternativa sería: if(Arrays.equals("mySecretPassword".toCharArray(),getPassword());
+				myPas = String.copyValueOf(getPassword());
+				
+				//enviar datos de los TextEdit a la clase y esperar conexión				
+				try {
+					conexion = conexionBD.ConexionMySQL(getUser(), myPas, getDbName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnConectarConBd.setBackground(new Color(178, 34, 34));
@@ -343,29 +367,63 @@ public class PrincipalBDLibros {
 		lblNombreDeBd.setBounds(81, 171, 128, 14);
 		panel_3.add(lblNombreDeBd);
 		
-		txtRoot = new JTextField();
-		txtRoot.setDropMode(DropMode.INSERT);
-		txtRoot.setText("root");
-		txtRoot.setBounds(247, 88, 143, 20);
-		panel_3.add(txtRoot);
-		txtRoot.setColumns(10);
+		txtF_user = new JTextField();
+		txtF_user.setDropMode(DropMode.INSERT);
+		txtF_user.setText("root");
+		txtF_user.setBounds(247, 88, 143, 20);
+		panel_3.add(txtF_user);
+		txtF_user.setColumns(10);
 		
 		//JPasswordField password = new JPasswordField();
 		//txtJoseantonio = new JTextField();
-		JPasswordField txtJoseantonio = new JPasswordField();
-		txtJoseantonio.setDropMode(DropMode.INSERT);
-		txtJoseantonio.setText("joseantonio-123");
-		txtJoseantonio.setBounds(247, 124, 143, 20);
-		panel_3.add(txtJoseantonio);
-		txtJoseantonio.setColumns(10);
+		JPasswordField txtF_passw = new JPasswordField();
+		txtF_passw.setDropMode(DropMode.INSERT);
+		txtF_passw.setText("joseantonio-123");
+		txtF_passw.setBounds(247, 124, 143, 20);
+		panel_3.add(txtF_passw);
+		txtF_passw.setColumns(10);
 		
-		txtBdlibros = new JTextField();
-		txtBdlibros.setText("bdlibros1");
-		txtBdlibros.setBounds(247, 168, 143, 20);
-		panel_3.add(txtBdlibros);
-		txtBdlibros.setColumns(10);
+		txtF_nombreBD = new JTextField();
+		txtF_nombreBD.setText("bdlibros1");
+		txtF_nombreBD.setBounds(247, 168, 143, 20);
+		panel_3.add(txtF_nombreBD);
+		txtF_nombreBD.setColumns(10);
 		btnSalir.setBackground(new Color(205, 92, 92));
 		btnSalir.setBounds(10, 475, 554, 23);
 		frmBaseDeDatos.getContentPane().add(btnSalir);
+		
 	}
+	//****************************************************************************************************** SETTER & GETTER
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public char[] getPassword() {
+		return password;
+	}
+
+	public void setPassword(char[] cs) {
+		this.password = cs;
+	}
+
+	public String getDbName() {
+		return dbName;
+	}
+
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+
+	public Connection getConexion() {
+		return conexion;
+	}
+
+	public void setConexion(Connection conexion) {
+		this.conexion = conexion;
+	}
+	
 }
